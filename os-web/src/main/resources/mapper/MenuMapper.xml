@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxnu.os.mapper.MenuMapper">
+    <resultMap id="BaseResultMap" type="com.jxnu.os.model.Menu">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parent_id" jdbcType="INTEGER"/>
+        <result column="menuPath" property="menuPath" jdbcType="VARCHAR"/>
+        <result column="isParent" property="isParent" jdbcType="BIT"/>
+    </resultMap>
+    <resultMap id="MenuWithChildren" type="com.jxnu.os.model.Menu" extends="BaseResultMap">
+        <collection property="children" ofType="com.jxnu.os.model.Menu"
+                    select="com.jxnu.os.mapper.MenuMapper.getAllMenuByParentId" column="id"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, name, parent_id,menuPath,isParent
+    </sql>
+
+    <select id="getAllMenuWithOutChildren" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+        </include>
+        from menu;
+    </select>
+
+    <select id="addMenu" statementType="CALLABLE">
+    call addMenu(#{name,mode=IN,jdbcType=VARCHAR},#{parent_id,mode=IN,jdbcType=INTEGER},#{result,mode=OUT,jdbcType=INTEGER},#{id,mode=OUT,jdbcType=INTEGER})
+   </select>
+
+    <select id="deleteMenuById" statementType="CALLABLE">
+    call deleteMenu(#{id,mode=IN,jdbcType=INTEGER},#{result,mode=OUT,jdbcType=INTEGER})
+   </select>
+
+    <select id="getAllMenuByParentId" resultMap="MenuWithChildren">
+    select * from menu where parent_id=#{parent_id};
+   </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from menu
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from menu
+    where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.jxnu.os.model.Menu">
+    insert into menu (id, name, parent_id,menuPath,isParent)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{menuPath,jdbcType=VARCHAR},
+    #{parent_id,jdbcType=INTEGER}, #{isParent,jdbcType=BIT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.jxnu.os.model.Menu">
+        insert into menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="parent_id != null">
+                parent_id,
+            </if>
+            <if test="menuPath != null">
+                menuPath,
+            </if>
+            <if test="isParent != null">
+                isParent,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="parent_id != null">
+                #{parent_id,jdbcType=INTEGER},
+            </if>
+            <if test="menuPath != null">
+                #{menuPath,jdbcType=VARCHAR},
+            </if>
+            <if test="isParent != null">
+                #{isParent,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jxnu.os.model.Menu">
+        update department
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="parent_id != null">
+                parent_id = #{parent_id,jdbcType=INTEGER},
+            </if>
+            <if test="menuPath != null">
+                menuPath = #{depPath,jdbcType=VARCHAR},
+            </if>
+            <if test="isParent != null">
+                isParent = #{isParent,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.jxnu.os.model.Menu">
+    update menu
+    set name = #{name,jdbcType=VARCHAR},
+      parent_id = #{parent_id,jdbcType=INTEGER},
+      menuPath = #{menuPath,jdbcType=VARCHAR},
+      isParent = #{isParent,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

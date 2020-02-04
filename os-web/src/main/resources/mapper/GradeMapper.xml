@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxnu.os.mapper.GradeMapper">
+
+    <insert id="addStuExamResult" parameterType="com.jxnu.os.model.Grade">
+        insert into grade
+        (s_id, p_id, totalScores, create_time,
+         singleScores, multipleScores, exerciseScores)
+         values
+         (#{p_id},#{s_id},#{totalScores},#{create_time},
+         #{singleScores},#{multipleScores},#{exerciseScores})
+    </insert>
+
+    <select id="findExamBySno" resultType="java.util.HashMap">
+        select singleScores,multipleScores,exerciseScores,totalScores,create_time,pname
+        from paper,grade,student
+        where grade.p_id = paper.id
+        and s_id = #{sno}
+    </select>
+
+    <select id="findExamStuBySno" parameterType="String" resultType="com.jxnu.os.model.Student">
+        select id,username
+        from student
+        where sno = #{sno}
+    </select>
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxnu.os.mapper.QuestionMapper">
+    <resultMap id="BaseResultMap" type="com.jxnu.os.model.Question">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="p_id" property="p_id" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="optionA" property="optionA" jdbcType="VARCHAR"/>
+        <result column="optionB" property="optionB" jdbcType="VARCHAR"/>
+        <result column="optionC" property="optionC" jdbcType="VARCHAR"/>
+        <result column="optionD" property="optionD" jdbcType="VARCHAR"/>
+        <result column="answer" property="answer" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    question.id,p_id,content,optionA,optionB,optionC,optionD,answer,type
+    </sql>
+
+    <select id="findSingleQuestions" resultType="java.util.HashMap">
+        select <include refid="Base_Column_List"/>,pname
+        from question,paper
+        where p_id = paper.id
+        and question.type = '单选'
+        and p_id = #{p_id}
+    </select>
+
+    <select id="findMultipleQuestions" resultType="java.util.HashMap">
+        select <include refid="Base_Column_List"/>,pname
+        from question,paper
+        where p_id = paper.id
+        and question.type = '多选'
+        and p_id = #{p_id}
+    </select>
+
+    <select id="findExerciseQuestions" resultType="java.util.HashMap">
+        select question.id,p_id,answer,question.type,pname
+        from question,paper
+        where p_id = paper.id
+        and question.type = '填空'
+        and p_id = #{p_id}
+    </select>
+
+    <select id="findAnswerById" resultMap="BaseResultMap">
+        select question.id,p_id,answer,question.type,pname
+        from question,paper
+        where p_id = paper.id
+        and question.id = #{id}
+    </select>
+
+</mapper>
