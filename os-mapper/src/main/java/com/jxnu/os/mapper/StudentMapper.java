@@ -12,7 +12,9 @@ public interface StudentMapper {
 
     Student loadUserBySno(String sno);
 
-    List<Student> getAllStu(@Param("sno") Integer sno, @Param("keywords") String keywords);
+    List<Student> getAll(@Param("id") Integer id, @Param("keywords") String keywords);
+
+    List<Student> getAllStu(@Param("keywords") String keywords);
 
     Student selectByPrimaryKey(Integer id);
 
@@ -22,5 +24,10 @@ public interface StudentMapper {
 
     int updateByPrimaryKey(Student student);
 
-    int modifyPass(String sno,String rePassword);
+    int modifyPass(@Param("sno") String sno,@Param("rePassword") String rePassword);
+
+    int base64Upload(@Param("imgFilePath") String imgFilePath,@Param("id") Integer id);
+
+//    Student selectUrl(Integer id);
+
 }

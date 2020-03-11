@@ -1,12 +1,14 @@
 server:
   port: 8082
+  max-http-header-size: 102400
+
 
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/os?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: root
-    password:
+    url: jdbc:mysql://39.106.65.18:3306/os?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: Homyit17
+    password: Homyit.17
     type: com.alibaba.druid.pool.DruidDataSource
 
 logging:
@@ -24,8 +26,8 @@ prop:
   upload-folder: D:/test/
 
 ##pagehelper分页插件
-#pagehelper:
-#  helperDialect: mysql
-#  reasonable: true
-#  supportMethodsArguments: true
-#  params: count=countSql
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

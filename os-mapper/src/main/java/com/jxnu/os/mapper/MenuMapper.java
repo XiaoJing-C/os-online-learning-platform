@@ -9,6 +9,7 @@ import java.util.List;
  */
 public interface MenuMapper {
     List<Menu> getAllMenuByParentId(Integer parent_id);
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(Menu menu);

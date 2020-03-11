@@ -10,5 +10,4 @@ public class StudentUtils {
     public static Student getCurrentStu() {
         return ((Student) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
-
 }

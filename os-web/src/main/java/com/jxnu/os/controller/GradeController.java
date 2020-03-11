@@ -6,10 +6,7 @@ import com.jxnu.os.model.RespBean;
 import com.jxnu.os.service.GradeService;
 import com.jxnu.os.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -17,6 +14,7 @@ import java.util.*;
 /**
  * @author xiao
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/grade")
 public class GradeController {

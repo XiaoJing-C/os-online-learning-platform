@@ -11,18 +11,24 @@ import java.util.List;
 /**
  * @author xiao
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/menu")
 public class MenuController {
 
     @Autowired
     MenuService menuService;
-    @GetMapping("/")
-    public List<Menu> getAllMenu() {
-        return menuService.getAllMenu();
+    @GetMapping("/by/{parent_id}")
+    public List<Menu> getAllMenu(@PathVariable Integer parent_id) {
+        return menuService.getAllMenu(parent_id);
     }
-    
-    @PostMapping("/")
+
+    @GetMapping("/all")
+    public  List<Menu> getAllMenuWithOutChildren() {
+        return menuService.getAllMenuWithOutChildren();
+    }
+
+    @PostMapping("/add")
     public RespBean addMenu(Menu menu) {
         menuService.addMenu(menu);
         if (menu.getResult() == 1) {
@@ -31,7 +37,7 @@ public class MenuController {
         return RespBean.error("添加失败");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/del/{id}")
     public RespBean deleteMenuById(@PathVariable Integer id) {
         Menu menu = new Menu();
         menu.setId(id);

@@ -1,0 +1,5 @@
+com\jxnu\os\mapper\MenuMapper.class
+com\jxnu\os\mapper\StudentMapper.class
+com\jxnu\os\mapper\ResourceMapper.class
+com\jxnu\os\mapper\GradeMapper.class
+com\jxnu\os\mapper\QuestionMapper.class

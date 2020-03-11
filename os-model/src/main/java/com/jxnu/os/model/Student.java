@@ -23,6 +23,38 @@ public class Student implements UserDetails {
     private String username;
     //登录密码
     private String password;
+    //专业
+    private String major;
+    //头像
+    private String avatarUrl;
+    //老师姓名
+    private String a_name;
+    //班级
+    private String classes;
+
+    public String getClasses() {
+        return classes;
+    }
+
+    public void setClasses(String classes) {
+        this.classes = classes;
+    }
+
+    public String getA_name() {
+        return a_name;
+    }
+
+    public void setA_name(String a_name) {
+        this.a_name = a_name;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
 
     public Integer getId() {
         return id;
@@ -38,6 +70,15 @@ public class Student implements UserDetails {
 
     public void setSno(String sno) {
         this.sno = sno;
+    }
+
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
     }
 
     public Integer getT_id() {

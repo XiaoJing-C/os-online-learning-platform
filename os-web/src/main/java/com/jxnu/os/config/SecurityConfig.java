@@ -22,10 +22,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -47,6 +50,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Autowired
+    private DataSource dataSource;
+
+    @Bean
+     public PersistentTokenRepository persistentTokenRepository(){
+                JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+                tokenRepository.setDataSource(dataSource);
+              // tokenRepository.setCreateTableOnStartup(true);  //系统在启动的时候生成“记住我”的数据表（只能使用一次）
+               return tokenRepository;
+           }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(studentService).passwordEncoder(new BCryptPasswordEncoder());
@@ -57,9 +70,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-//                .authenticationProvider(authenticationProvider())
                 .httpBasic()
                 //未登录时
+
                 .authenticationEntryPoint((request,response,authException) -> {
                     response.setContentType("application/json;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -73,7 +86,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .anyRequest().authenticated() //必须授权才能范围
+                //.antMatchers("/course").authenticated()
+                .anyRequest().permitAll() //必须授权才能范围
 
                 .and()
                 .formLogin() //使用自带的登录
@@ -139,7 +153,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         out.close();
                     }
                 })
-                .permitAll();
+                .permitAll()
+                .and()
+                .rememberMe()
+                .userDetailsService(studentService)
+                .tokenValiditySeconds(3600)
+                .tokenRepository(persistentTokenRepository());
+
         //开启跨域访问
         http.cors().disable();
         //开启模拟请求，比如API POST测试工具的测试，不开启时，API POST为报403错误
@@ -153,10 +173,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                 .antMatchers("/student/register");
     }
-
-
-
-
-
 }
 

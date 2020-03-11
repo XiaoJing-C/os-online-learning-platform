@@ -8,6 +8,10 @@
         <result column="s_sex" property="s_sex" jdbcType="CHAR"/>
         <result column="t_id" property="t_id" jdbcType="INTEGER"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="avatarUrl" property="avatarUrl" jdbcType="VARCHAR"/>
+        <result column="major" property="major" jdbcType="VARCHAR"/>
+        <result column="classes" property="classes" jdbcType="VARCHAR"/>
+
     </resultMap>
 
     <select id="loadUserBySno" resultMap="BaseResultMap">
@@ -15,11 +19,13 @@
     </select>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select * from student where id = #{id,jdbcType=INTEGER}
+        select student.id,username,sno,s_sex,a_name,major,classes from student,admin
+        where student.id = #{id,jdbcType=INTEGER}
+        and student.t_id = admin.id
     </select>
 
     <select id="getAllStu" resultMap="BaseResultMap">
-        select id,sno,s_sex,username,t_id from student
+        select id,sno,s_sex,username,t_id,classes  from student
         <if test="keywords!=null">
             where sno like concat('%',#{keywords},'%') or username like concat('%',#{keywords},'%')
         </if>
@@ -29,12 +35,17 @@
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from student where id = #{id,jdbcType=INTEGER}
     </delete>
-
-    <update id="updateByPrimaryKey" parameterType="com.jxnu.os.model.Student">
+    <update id="base64Upload">
         update student
+        set avatarUrl=#{imgFilePath}
+
+        where id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.jxnu.os.model.Student">
+        update student,admin
         <set>
             <if test="username != null">
-                name = #{username,jdbcType=VARCHAR},
+                username = #{username,jdbcType=VARCHAR},
             </if>
             <if test="sno != null">
                 sno = #{sno,jdbcType=VARCHAR},
@@ -42,11 +53,17 @@
             <if test="s_sex != null">
                 s_sex = #{s_sex,jdbcType=VARCHAR},
             </if>
-            <if test="t_id !=null ">
-                t_id = #{t_id,jdbcType=INTEGER},
+            <if test="a_name !=null ">
+                a_name = #{a_name,jdbcType=VARCHAR},
+            </if>
+            <if test="major !=null">
+                major = #{major,jdbcType=VARCHAR},
+            </if>
+            <if test="classes !=null">
+                classes = #{classes,jdbcType=VARCHAR}
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where student.id = #{id,jdbcType=INTEGER} and t_id = admin.id
     </update>
 
     <update id="modifyPass" parameterType="com.jxnu.os.model.Student">
@@ -54,10 +71,9 @@
     </update>
 
     <insert id="insert" parameterType="com.jxnu.os.model.Student">
-        insert into student (username,sno,password,s_sex,t_id)
+        insert into student (username,sno,password)
         values (#{username,jdbcType=VARCHAR},#{sno,jdbcType=VARCHAR},
-        #{password,jdbcType=VARCHAR},#{s_sex,jdbcType=CHAR},
-        #{t_id,jdbcType=INTEGER})
+        #{password,jdbcType=VARCHAR})
     </insert>
 
 </mapper>

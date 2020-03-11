@@ -1,0 +1,12 @@
+com\jxnu\os\model\PageResult.class
+com\jxnu\os\model\RespBean.class
+com\jxnu\os\model\Grade.class
+com\jxnu\os\model\Menu.class
+com\jxnu\os\model\Question.class
+com\jxnu\os\model\PageRequest.class
+com\jxnu\os\model\Base64Data.class
+com\jxnu\os\model\Student.class
+com\jxnu\os\model\Admin.class
+com\jxnu\os\model\Paper.class
+com\jxnu\os\model\Course.class
+com\jxnu\os\model\Resource.class
